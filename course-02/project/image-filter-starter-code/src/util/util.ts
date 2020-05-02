@@ -1,5 +1,7 @@
 import fs from 'fs';
 import Jimp = require('jimp');
+var validUrl = require('valid-url');
+
 
 // filterImageFromURL
 // helper function to download, filter, and save the filtered image locally
@@ -10,16 +12,21 @@ import Jimp = require('jimp');
 //    an absolute path to a filtered image locally saved file
 export async function filterImageFromURL(inputURL: string): Promise<string>{
     return new Promise( async resolve => {
-        const photo = await Jimp.read(inputURL);
-        const outpath = '/tmp/filtered.'+Math.floor(Math.random() * 2000)+'.jpg';
-        await photo
-        .resize(256, 256) // resize
-        .quality(60) // set JPEG quality
-        .greyscale() // set greyscale
-        .write(__dirname+outpath, (img)=>{
-            resolve(__dirname+outpath);
-        });
+        try {
+            const photo = await Jimp.read(inputURL);
+            const outpath = '/tmp/filtered.'+Math.floor(Math.random() * 2000)+'.jpg';
+            await photo
+            .resize(256, 256) // resize
+            .quality(60) // set JPEG quality
+            .greyscale() // set greyscale
+            .write(__dirname+outpath, (img)=>{
+                resolve(__dirname+outpath);
+            });
+        } catch(e) {
+          resolve(null);
+        }
     });
+
 }
 
 // deleteLocalFiles
@@ -30,5 +37,14 @@ export async function filterImageFromURL(inputURL: string): Promise<string>{
 export async function deleteLocalFiles(files:Array<string>){
     for( let file of files) {
         fs.unlinkSync(file);
+    }
+}
+
+
+export function isValidUrl(inputURL: string): boolean {
+    if (validUrl.isUri(inputURL)){
+        return true;
+    } else {
+        return false;
     }
 }

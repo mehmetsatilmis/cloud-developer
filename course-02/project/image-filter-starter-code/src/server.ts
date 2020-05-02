@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import {filterImageFromURL, deleteLocalFiles} from './util/util';
+import {filterImageFromURL, deleteLocalFiles, isValidUrl} from './util/util';
 
 (async () => {
 
@@ -30,6 +30,33 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   /**************************************************************************** */
 
   //! END @TODO1
+  app.get( "/filteredimage", async ( req, res ) => {
+    const imageUrl = req.query.image_url;
+
+    if (!imageUrl) {
+      return res.status(400).send({ status: -1, message: 'image_url is required' });
+    }
+    try {
+      if(!isValidUrl(imageUrl)) {
+        return res.status(400).send({ status: -1, message: 'image_url is invalid or not accessible'});
+      }
+
+      const filteredFilePath = await filterImageFromURL(imageUrl); 
+      if(!filteredFilePath) {
+         return res.status(409).send({ status: -1, message: 'Something wrong. Check url again'});
+      }
+
+      res.sendFile(filteredFilePath,() => {
+         deleteLocalFiles([filteredFilePath]);
+      });
+    } catch(e) {
+      return res.status(500).send({ status: -1, message: 'Unknown Error. Please Check log'})
+    } 
+
+  } );
+
+
+
   
   // Root Endpoint
   // Displays a simple message to the user
