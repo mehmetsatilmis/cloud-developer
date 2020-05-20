@@ -1,0 +1,40 @@
+version: "3"
+services:
+  reverseproxy:
+      image: mehmetsatilmis/reverseproxy
+      ports:
+          - 8080:8080
+      restart: always
+      depends_on:
+        - backend-user
+        - backend-feed     
+  backend-user:
+    image: mehmetsatilmis/udagram-user
+    volumes:
+      - $HOME/.aws:/root/.aws
+    environment:
+      POSTGRESS_USERNAME: $POSTGRESS_USERNAME
+      POSTGRESS_PASS: $POSTGRESS_PASS 
+      POSTGRESS_DB: $POSTGRESS_DB 
+      POSTGRESS_HOST: $POSTGRESS_HOST 
+      AWS_REGION: $AWS_REGION 
+      AWS_PROFILE: $AWS_PROFILE 
+      S3_BUCKET: $S3_BUCKET
+      JWT_SECRET: $JWT_SECRET
+  backend-feed:
+    image: mehmetsatilmis/udagram-feed
+    volumes:
+      - $HOME/.aws:/root/.aws
+    environment:
+      POSTGRESS_USERNAME: $POSTGRESS_USERNAME
+      POSTGRESS_PASS: $POSTGRESS_PASS 
+      POSTGRESS_DB: $POSTGRESS_DB 
+      POSTGRESS_HOST: $POSTGRESS_HOST 
+      AWS_REGION: $AWS_REGION 
+      AWS_PROFILE: $AWS_PROFILE 
+      S3_BUCKET: $S3_BUCKET
+      JWT_SECRET: $JWT_SECRET
+  frontend:
+    image: mehmetsatilmis/udagram-frontend
+    ports:
+      - "8100:80"
