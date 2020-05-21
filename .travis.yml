@@ -13,7 +13,7 @@ before_install:
   - echo "$KUBE_CONFIG" | base64 -d > ${HOME}/.kube/config
 install:
   - echo 'Docker compose build start'
-  - docker-compose -f course-02/exercises/udacity-c3-deployment/docker/docker-compose-build.yaml build --parallel
+  - docker-compose -f course-02/exercises/udacity-c3-deployment/docker/docker-compose-build.yaml build
   - echo 'Docker compose build start'
   - docker push mehmetsatilmis/udagram-user
   - docker push mehmetsatilmis/udagram-feed
