@@ -24,9 +24,7 @@ install:
   - kubectl apply -f course-02/exercises/udacity-c3-deployment/k8s/backend-user-service.yaml --record
   - kubectl apply -f course-02/exercises/udacity-c3-deployment/k8s/frontend-service.yaml --record
   - kubectl apply -f course-02/exercises/udacity-c3-deployment/k8s/reverseproxy-service.yaml --record
-  - kubectl apply -f course-02/exercises/udacity-c3-deployment/k8s/aws-secret.yaml --record
   - kubectl apply -f course-02/exercises/udacity-c3-deployment/k8s/env-configmap.yaml --record
-  - kubectl apply -f course-02/exercises/udacity-c3-deployment/k8s/env-secret.yaml --record
   - kubectl apply -f course-02/exercises/udacity-c3-deployment/k8s/backend-feed-deployment.yaml --record
   - kubectl apply -f course-02/exercises/udacity-c3-deployment/k8s/backend-user-deployment.yaml --record
   - kubectl apply -f course-02/exercises/udacity-c3-deployment/k8s/frontend-deployment.yaml --record
