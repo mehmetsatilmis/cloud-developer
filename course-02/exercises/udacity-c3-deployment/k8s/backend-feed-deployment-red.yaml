@@ -1,11 +1,14 @@
 apiVersion:  apps/v1
 kind: Deployment
 metadata:
-  labels:
-    service: backend-feed
-  name: backend-feed
+  name: backend-feed-red
 spec:
-  replicas: 2
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25% 
   selector:
     matchLabels:
       service: backend-feed
@@ -13,9 +16,10 @@ spec:
     metadata:
       labels:
         service: backend-feed
+        color: red
     spec:
       containers:
-      - image: mehmetsatilmis/udagram-feed
+      - image: mehmetsatilmis/udagram-feed:v2
         name: backend-feed
         imagePullPolicy: Always  
         resources:
