@@ -37,3 +37,4 @@ venv/
 .vscode
 
 course-02/exercises/udacity-c2-restapi/src/config/config.ts
+**.serverless/
