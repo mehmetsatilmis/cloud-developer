@@ -16,24 +16,30 @@ export class TodoAccess {
     private readonly todoUserIdx = process.env.TODO_USER_ID_INDEX) {
   }
 
-  async getAllTodos(): Promise<TodoItem[]> {
+  async getAllTodos(userId : string): Promise<TodoItem[]> {
     console.log('Getting all groups')
 
-    const result = await this.docClient.scan({
-      TableName: this.todosTable
+    const result =await this.docClient.query({
+        TableName: this.todosTable,
+        IndexName: this.todoUserIdx,
+        KeyConditionExpression: 'userId = :userId',
+        ExpressionAttributeValues: {
+            ':userId': userId
+        }
     }).promise()
 
     const items = result.Items
     return items as TodoItem[]
   }
 
-  async getTodoItem(todoId: string): Promise<TodoItem> {
+  async getTodoItem(todoId: string, userId : string): Promise<TodoItem> {
     const todos = await this.docClient.query({
         TableName: this.todosTable,
         IndexName: this.todoUserIdx,
-        KeyConditionExpression: 'todoId = :todoId',
+        KeyConditionExpression: 'todoId = :todoId and userId = :userId',
         ExpressionAttributeValues: {
-            ':todoId': todoId
+            ':todoId': todoId,
+            ':userId': userId
         }
     }).promise()
     
