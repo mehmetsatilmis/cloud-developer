@@ -1,4 +1,7 @@
 import * as AWS  from 'aws-sdk'
+import { createLogger } from '../utils/logger'
+
+const logger = createLogger("AttachmentAccessLogger")
 
 export class AttachmentAccess {
 
@@ -9,11 +12,23 @@ export class AttachmentAccess {
   }
 
   async getUploadUrl(todoId: string): Promise<String> {
+    logger.info("getUploadUrl generate url for todoId : " + todoId)
+
     return this.s3Client.getSignedUrl('putObject', {
       Bucket: this.s3Bucket,
       Key: todoId,
       Expires: this.urlExpiration
     })
+  }
+
+  async deleteAttachment(todoId: string): Promise<any> {
+    logger.info("getUploadUrl generate url for todoId : " + todoId)
+
+    return this.s3Client.deleteObject({
+        Bucket: this.s3Bucket,
+        Key: todoId
+    }).promise();
+
   }
  
 }

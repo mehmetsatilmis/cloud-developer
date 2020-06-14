@@ -1,10 +1,14 @@
 import { InvalidArgumentError } from '../errors/InvalidArgumentError'
 import { NotFoundError } from '../errors/NotFoundError'
 import { UnauthorizedError } from '../errors/UnauthorizedError'
+import { createLogger } from "../utils/logger";
 
+const logger = createLogger('createErrorResponse');
 
 
 export function createErrorResponse(error : any) {
+    logger.error(JSON.stringify({error: error}))
+
     if(error instanceof InvalidArgumentError) {
         return {
             statusCode: 400,
@@ -36,7 +40,7 @@ export function createErrorResponse(error : any) {
     return {
         statusCode: 500,
         body: JSON.stringify({
-            error: error
+            error: 'Internal server error'
         })
     }
 }
