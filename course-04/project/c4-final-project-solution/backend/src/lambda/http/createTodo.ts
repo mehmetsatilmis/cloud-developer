@@ -8,10 +8,13 @@ import * as middy from "middy";
 import { cors } from "middy/middlewares";
 import { createTodoItem } from '../../businessLogic/todos';
 import { createErrorResponse } from '../../utils/errorResponseUtils';
+import { validateCreateTodoReq } from '../../businessLogic/validator';
 
 export const handler = middy (async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   const newTodo: CreateTodoRequest = JSON.parse(event.body)
   try {
+    validateCreateTodoReq(newTodo);
+
     const item = await createTodoItem(newTodo, event);
 
     return {
